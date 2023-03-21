@@ -3,6 +3,7 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void save(String path) {
@@ -73,6 +74,15 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        Person filePerson=null;
+        try {
+            filePerson = Person.GetPersonFromFile("test/test_same_osoby/Alicja Stefanek.txt");
+            filePerson = Person.GetPersonFromFile("test/test_same_osoby/Alicja Stefanek2.txt");
+        }catch (FileNotFoundException | AmbigiousPersonException e){
+            e.printStackTrace();
+        }
+        System.out.println(filePerson.toString());
+
         //save("people.bin");
 
         load("people.bin");
