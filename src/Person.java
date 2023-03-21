@@ -59,20 +59,24 @@ public class Person implements Serializable {
             }
         }
     }
-    static List<String> names = new ArrayList<>();
-    public static Person GetPersonFromFile(String path) throws FileNotFoundException, AmbigiousPersonException {
+
+    static List<TemporaryPerson> people = new ArrayList<>();
+
+    public static Person getPersonFromFile(String path) throws FileNotFoundException,AmbigiousPersonException {
         File file = new File(path);
         Scanner sc = new Scanner(file);
         String nameAndLastName = sc.nextLine();
         LocalDate birthdayDate = LocalDate.parse(sc.nextLine(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        LocalDate deathDate =null;
+        LocalDate deathDate = null;
         if(sc.hasNextLine()){
             deathDate = LocalDate.parse(sc.nextLine(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         }
-        if(names.contains(nameAndLastName)){
-            throw new AmbigiousPersonException(nameAndLastName);
+        for(var person : people){
+            if(person.name.compareTo(nameAndLastName)==0){
+                throw new AmbigiousPersonException(person.name,path,person.path);
+            }
         }
-        return new Person(nameAndLastName,birthdayDate,deathDate);
+        people.add(new TemporaryPerson(nameAndLastName,path));
+        return new Person(nameAndLastName, birthdayDate, deathDate);
     }
-
 }
